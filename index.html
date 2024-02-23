@@ -1,0 +1,87 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: green;
+        }
+
+        p {
+            font-size: 20px;
+        }
+
+        .container {
+            width: 300px;
+            margin: 0 auto;
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        .sensor {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: lightblue;
+            line-height: 100px;
+            vertical-align: middle;
+        }
+
+        .value {
+            display: inline-block;
+            width: 150px;
+            height: 100px;
+            line-height: 100px;
+            vertical-align: middle;
+        }
+    </style>
+    <script>
+        // Define the URL to get data
+        const url = "api.thingspeak.com/update?api_key=RN3LL7LEC4DHCNXD&field1";
+
+        // Define a function to fetch data from the URL
+        function fetchData() {
+            // Use the fetch API to send a GET request
+            fetch(url)
+                .then((response) => {
+                    // Check if the response is OK
+                    if (response.ok) {
+                        // Return the response as JSON
+                        return response.json();
+                    } else {
+                        // Throw an error
+                        throw new Error("Something went wrong");
+                    }
+                })
+                .then((data) => {
+                    // Update the HTML elements with the data
+                    document.getElementById("temp").innerHTML = data.temp + " °C";
+                    document.getElementById("hum").innerHTML = data.hum + " %";
+                })
+                .catch((error) => {
+                    // Log the error to the console
+                    console.error(error);
+                });
+        }
+
+        // Call the function every 10 seconds
+        setInterval(fetchData, 10000);
+    </script>
+</head>
+<body>
+    <h1>سایت نمایش داده های سیم 800</h1>
+    <p>این سایت داده های دما و رطوبت را که از طریق ماژول سیم 800 ارسال می شوند را نشان می دهد.</p>
+    <div class="container">
+        <div class="sensor">دما</div>
+        <div class="value" id="temp">0 °C</div>
+    </div>
+    <div class="container">
+        <div class="sensor">رطوبت</div>
+        <div class="value" id="hum">0 %</div>
+    </div>
+</body>
+</html>
